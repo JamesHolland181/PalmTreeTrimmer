@@ -19,7 +19,7 @@ class Right_Bay extends StatelessWidget{
               child: SizedBox(
                 width: 100.0,
                 height: 100.0,
-                child: DecoratedBox(decoration: BoxDecoration(color: Colors.red)),
+                child: Image.asset('assets/icons/saw_blade.png'),
               ),
               //color:  Colors.blueAccent[600],
               onPressed: null,
