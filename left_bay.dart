@@ -8,6 +8,39 @@
 import 'dart:math';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'dart:io';
+
+Socket socket;
+
+void post(command){
+  Socket.connect("172.21.81.222", 6060)
+      .then((Socket sock) {
+    socket = sock;
+    socket.listen(dataHandler,
+        onError: errorHandler,
+        onDone: doneHandler,
+        cancelOnError: false);
+  }).then((_) {
+    socket.write(command);
+    socket.close();
+    })
+      .catchError((Object e) {
+    print("Unable to connect: $e");
+    exit(1);
+  });
+}
+
+void dataHandler(data){
+  print(new String.fromCharCodes(data).trim());
+}
+
+void errorHandler(error, StackTrace trace){
+  print(error);
+}
+
+void doneHandler(){
+  socket.destroy();
+}
 
 class Left_Bay_State extends State<Left_Bay>{
 
@@ -25,8 +58,8 @@ class Left_Bay_State extends State<Left_Bay>{
     setState(() {
       path_btn_up = 'assets/icons/btn_upPressed_beta.png';
     });
-
     //Apply power to motors
+    post('up');
   }
 
   //Called onPointerUp by "UP BUTTON"
@@ -38,6 +71,7 @@ class Left_Bay_State extends State<Left_Bay>{
     });
 
     //Cut power to motors
+    post('stop');
   }
 
   //Called onPointerDown by "DOWN BUTTON"
@@ -49,6 +83,7 @@ class Left_Bay_State extends State<Left_Bay>{
     });
 
     //Apply negative power to motors
+    post('down');
   }
 
   //Called onPointerUp by "DOWN BUTTON"
@@ -60,6 +95,7 @@ class Left_Bay_State extends State<Left_Bay>{
     });
 
     //Cut power to motors
+    post('stop');
   }
 
   //Called onPressed by "POWER BUTTON"
@@ -69,6 +105,9 @@ class Left_Bay_State extends State<Left_Bay>{
     setState(() {
       path_btn_pwr = 'assets/icons/btn_lit_beta.png';
     });
+
+    //turn on saw
+    post('*Chain saw noises*');
   }
 
   @override
