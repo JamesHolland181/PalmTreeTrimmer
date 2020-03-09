@@ -6,7 +6,11 @@
 
 import 'package:flutter/material.dart';
 import 'app.dart';
+import 'dart:io';
+import 'dart:async';
 
-main(){
-  runApp(App()); // calls 'runApp()' with the parameter 'App()', the class of our application in app.dart
+Socket socket;
+
+void main(){
+    runApp(App()); // calls 'runApp()' with the parameter 'App()', the class of our application in app.dart
 }
